@@ -36,7 +36,11 @@ const udpSend = (socket, message, rawUrl, callback = () => {}) => {
   socket.send(message, 0, message.length, url.port, url.hostname, callback);
 };
 
-const respType = (resp) => {};
+const respType = (resp) => {
+    const action = resp.readUInt32BE(0);
+    if(action === 0) return 'connect';
+    if(action === 1) return 'announce';
+};
 
 // Now let’s take a look at actually building the messages. Each message is a buffer with a specific format described in the BEP. Let’s take a look at the connect request first.
 // The BEP describes the connect request as follows:

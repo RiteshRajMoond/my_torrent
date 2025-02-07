@@ -2,6 +2,7 @@
 
 import fs from "fs";
 import bencode from "bencode";
+import crypto from "crypto";
 
 const open = (filepath) => {
   return bencode.decode(fs.readFileSync(filepath));
