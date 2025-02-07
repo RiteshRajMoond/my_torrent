@@ -1,29 +1,11 @@
 "use strict";
 
-import bencode from "bencode";
+import getPeers from "./tracker.mjs";
+import { open } from "./torrent-parser.mjs";
 
-import fs from "fs";
-import dgram from "dgram";
-import { Buffer } from "buffer";
+// We are establishing a connection with the tracker and getting a list of peers. We are using the open function from torrent-parser to read the torrent file and pass it to the getPeers function.
+const torrent = open('my_torrent.torrent');
 
-const torrent = bencode.decode(fs.readFileSync("my_torrent.torrent"));
-
-const announceUrl = torrent.announce
-  .toString("utf8")
-  .split(",")
-  .map((code) => String.fromCharCode(code))
-  .join("");
-
-const url = new URL(announceUrl);
-
-const socket = dgram.createSocket("udp4");
-const myMsg = Buffer.from(
-  "Hare Krsna Hare Krsna Krsna Krsna Hare Hare Hare Rama Hare Rama Rama Rama Hare Hare",
-  "utf8"
-);
-
-socket.send(myMsg, 0, myMsg.length, url.port, url.host, () => {});
-
-socket.on('message', msg => {
-    console.log("Message recieved is: ", msg);
-})
+getPeers(torrent, (peers) => {
+  console.log("list of peers: ", peers);
+});
