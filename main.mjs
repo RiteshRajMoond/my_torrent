@@ -1,11 +1,8 @@
-"use strict";
+'use strict';
 
-import getPeers from "./src/tracker.mjs";
+import download from "./src/download.mjs";
 import { open } from "./src/torrent-parser.mjs";
 
-// We are establishing a connection with the tracker and getting a list of peers. We are using the open function from torrent-parser to read the torrent file and pass it to the getPeers function.
-const torrent = open('my_torrent.torrent');
+const torrent = open(process.argv[2]);
 
-getPeers(torrent, (peers) => {
-  console.log("list of peers: ", peers);
-});
+download(torrent);
